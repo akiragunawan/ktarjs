@@ -1,0 +1,109 @@
+
+													{/* First OTP */}
+													<div className=" ">
+														<input
+															onChange={handleChange}
+															name="field-1"
+															length="1"
+															type="number"
+															className="form-control"
+															id="OTPInput1"
+															placeholder="_"
+															style={{
+																width: "40px",
+																textAlign: "center",
+															}}
+															required
+														/>
+													</div>
+													{/* End First OTP */}
+													{/* Second OTP */}
+													<div className=" ">
+														<input
+															onChange={handleChange}
+															name="field-2"
+															length="1"
+															type="text"
+															className="form-control"
+															id="OTPInput2"
+															placeholder="_"
+															style={{
+																width: "40px",
+																textAlign: "center",
+															}}
+															required
+														/>
+													</div>
+													{/* End Second OTP */}
+													{/* Third OTP */}
+													<div className=" ">
+														<input
+															onChange={handleChange}
+															name="field-3"
+															length="1"
+															type="text"
+															className="form-control"
+															id="OTPInput3"
+															placeholder="_"
+															style={{
+																width: "40px",
+																textAlign: "center",
+															}}
+															required
+														/>
+													</div>
+													{/* End Third OTP */}
+													{/* Fouth OTP */}
+													<div className=" ">
+														<input
+															onChange={handleChange}
+															name="field-4"
+															length="1"
+															type="text"
+															className="form-control"
+															id="OTPInput4"
+															placeholder="_"
+															style={{
+																width: "40px",
+																textAlign: "center",
+															}}
+															required
+														/>
+													</div>
+													{/* End Fouth OTP */}
+													{/* Fifth OTP */}
+													<div className=" ">
+														<input
+															onChange={handleChange}
+															name="field-5"
+															length="1"
+															type="text"
+															className="form-control"
+															id="OTPInput5"
+															placeholder="_"
+															style={{
+																width: "40px",
+																textAlign: "center",
+															}}
+															required
+														/>
+													</div>
+													{/* End Fifth OTP */}
+													{/* Sixth OTP */}
+													<div className=" ">
+														<input
+															onChange={handleChange}
+															name="field-6"
+															length="1"
+															type="text"
+															className="form-control"
+															id="OTPInput6"
+															placeholder="_"
+															style={{
+																width: "40px",
+																textAlign: "center",
+															}}
+															required
+														/>
+													</div>
+													{/* End Sixth OTP */}
