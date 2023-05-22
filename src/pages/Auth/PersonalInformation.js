@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import sucess1 from "../../assets/success1.png";
 function PersonalInformation() {
 	const { state } = useLocation();
-	const [PhoneNumber, setPhoneNumber] = useState(state?.Phone);
+	const [PhoneNumber] = useState(state?.Phone);
 
 	return (
 		<motion.div
@@ -33,7 +33,7 @@ function PersonalInformation() {
 									<div className="d-flex justify-content-evenly">
 										<div className="mt-2 d-flex flex-column justify-content-center">
 											<div className="text-center">
-												<a className="text-primary">|</a>
+												<div className="text-primary">|</div>
 											</div>
 											<div>
 												<p className="fw-bold text-primary text-uppercase">
@@ -43,7 +43,7 @@ function PersonalInformation() {
 										</div>
 										<div className="mt-2 d-flex flex-column justify-content-center">
 											<div className="text-center">
-												<a className="text-primary">|</a>
+												<div className="text-primary">|</div>
 											</div>
 											<div>
 												<p className=" text-primary text-uppercase">
@@ -53,7 +53,7 @@ function PersonalInformation() {
 										</div>
 										<div className="mt-2 d-flex flex-column justify-content-center">
 											<div className="text-center ">
-												<a className="text-primary">|</a>
+												<div className="text-primary">|</div>
 											</div>
 											<div>
 												<p className=" text-primary text-uppercase">Done</p>

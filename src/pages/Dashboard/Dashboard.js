@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 
 function Dashboard() {
 	const { state } = useLocation();
-	const [Phone, setPhone] = useState(state?.Phone);
-	const [Email, setEmail] = useState(state?.Email);
+	const [Phone] = useState(state?.Phone);
+	const [Email] = useState(state?.Email);
 	console.log(Phone, Email);
 
 	return (

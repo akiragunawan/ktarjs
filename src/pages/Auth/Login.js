@@ -1,24 +1,25 @@
-import { faCube } from "@fortawesome/react-fontawesome";
+// import { faCube } from "@fortawesome/react-fontawesome";
 import loginpic from "../../assets/bg22.png";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Modal, Row, Col, Button } from "react-bootstrap";
-import terms from "../Auth/terms.txt";
+import { Modal} from "react-bootstrap";
+// import terms from "../Auth/terms.txt";
 
 function Login() {
 	const [Email, setEmail] = useState("");
-	const [Phone, setPhone] = useState("");
-	const [IndexSignIn, setIndexSignIn] = useState(0);
+	const [Password, setPassword] = useState("");
+	// const [Phone, setPhone] = useState("");
+	// const [IndexSignIn, setIndexSignIn] = useState(0);
 	const [Show, setShow] = useState(false);
 	const [TermsChecked, setTermsChecked] = useState(false);
 	// sessionStorage.setItem("Terms", "");
 	const navigate = useNavigate();
 	useEffect(() => {
 		var termsses = sessionStorage.getItem("Terms");
-		if (termsses == false) {
+		if (termsses === false) {
 			setShow(true);
-		} else if (termsses == "" || termsses == null) {
+		} else if (termsses === "" || termsses === null) {
 			setShow(true);
 		}
 	}, []);
@@ -36,7 +37,7 @@ function Login() {
 	};
 
 	const tryLogin = async () => {
-		navigate("/otp", { state: { Phone: Phone, Email: Email } });
+		// navigate("/otp", { state: { Phone: Phone, Email: Email } });
 		// console.log(Email, Password);
 		// const response = await fetch("http://127.0.0.1:8000/api/login", {
 		// 	method: "POST",
@@ -98,7 +99,7 @@ function Login() {
 														</span>
 													</div>
 												</div>
-												<div className="d-flex my-3 justify-content-evenly">
+												{/* <div className="d-flex my-3 justify-content-evenly">
 													<div>
 														<a
 															className={
@@ -123,10 +124,10 @@ function Login() {
 															Sign In With Phone
 														</a>
 													</div>
-												</div>
+												</div> */}
 
-												{IndexSignIn == 0 ? (
-													<motion.div
+												{/* {IndexSignIn === 0 ? ( */}
+													<div
 														initial={{ x: "-100vw" }}
 														animate={{ x: 0 }}
 														exit={{ x: "100vw" }}
@@ -136,15 +137,32 @@ function Login() {
 														<input
 															type="email"
 															className="form-control"
-															id="floatingInput"
+															id="floatingEmailInput"
 															placeholder="name@example.com"
 															onChange={(e) => setEmail(e.target.value)}
 															required
 														/>
-														<label htmlFor="floatingInput">Email address</label>
-													</motion.div>
-												) : (
-													<motion.div
+														<label htmlFor="floatingEmailInput">Email address</label>
+													</div>
+													<div
+														initial={{ x: "-100vw" }}
+														animate={{ x: 0 }}
+														exit={{ x: "100vw" }}
+														transition={{ duration: 0.2, origin: 1 }}
+														className="form-floating mb-3"
+													>
+														<input
+															type="password"
+															className="form-control"
+															id="floatingPasswordInput"
+															placeholder="Password"
+															onChange={(e) => setPassword(e.target.value)}
+															required
+														/>
+														<label htmlFor="floatingPasswordInput">Password</label>
+													</div>
+												{/* ) : ( */}
+													{/* <motion.div
 														initial={{ x: "-100vw" }}
 														animate={{ x: 0 }}
 														exit={{ x: "100vw" }}
@@ -175,11 +193,11 @@ function Login() {
 																</label>
 															</div>{" "}
 														</div>
-													</motion.div>
-												)}
+													</motion.div> */}
+												{/* )} */}
 
 												<div className="pt-1 mb-4 mt-3">
-													<a
+													<button
 														onClick={tryLogin}
 														className="btn btn-primary btn-lg w-100"
 														style={{
@@ -189,7 +207,7 @@ function Login() {
 														}}
 													>
 														Login
-													</a>
+													</button>
 												</div>
 
 												{/* <p
@@ -419,13 +437,13 @@ function Login() {
 							I have Read the Terms
 						</label>
 					</div>
-					<a
+					<button
 						className="text-white btn btn-primary"
 						onClick={handleTermsClick}
 						variant="primary"
 					>
 						Understood
-					</a>
+					</button>
 				</Modal.Footer>
 			</Modal>
 		</motion.div>

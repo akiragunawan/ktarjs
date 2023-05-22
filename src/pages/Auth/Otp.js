@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import optImg from "../../assets/otp.png";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function Otp() {
 	const { state } = useLocation();
 	const navigate = useNavigate();
-	const [Phone, setPhone] = useState(state?.Phone);
-	const [Email, setEmail] = useState(state?.Email);
+	const [Phone] = useState(state?.Phone);
+	// const [Email] = useState(state?.Email);
 
 	// var phone = location.state.phone;
-	const [otp, setOtp] = useState("");
+	// const [otp, setOtp] = useState("");
 	const [minutes, setMinutes] = useState(2);
 	const [seconds, setSeconds] = useState(0);
 
@@ -30,21 +30,24 @@ function Otp() {
 
 	/* ****************************************** Handling Submit OTP ******************************************* */
 
-	const submitOtp = (otpString) => {
-		console.log(otpString);
-		{
-			/* TODO:: HIT API FOR OTP VERIFICATION */
-		}
-	};
+	// const submitOtp = (otpString) => {
+	// 	console.log(otpString);
+	// 	{
+	// 		/* TODO:: HIT API FOR OTP VERIFICATION */
+	// 	}
+	// };
 
 	/* ****************************************** End Submit OTP ******************************************* */
 	/* ******************************************  Combining OTP ******************************************* */
 	useEffect(() => {
 		const otpString = digits.join(""); // Concatenate digits into a single string
 
-		if (otpString.length == 6) {
+		if (otpString.length === 6) {
 			// submitOtp(otpString);
-			navigate("/Dashboard", { state: { Phone: Phone, Email: Email } });
+
+			/* TODO:: HIT API FOR OTP VERIFICATION */
+
+			navigate("/additionaldata", { state: { Phone: Phone } });
 		}
 	}, [digits]);
 	/* ****************************************** End Combining OTP ******************************************* */
@@ -110,8 +113,8 @@ function Otp() {
 	}, [seconds]);
 
 	const resendOTP = () => {
-		setMinutes(1);
-		setSeconds(30);
+		setMinutes(2);
+		setSeconds(0);
 	};
 	/* **************************************************** End Timer Counter ***************************************************** */
 	return (
@@ -154,10 +157,7 @@ function Otp() {
 														</span>
 													</div>
 													<div className="text-muted mt-3">
-														{Email == "" && Phone
-															? "We send you a code to your Phone Number +62 " +
-															  Phone
-															: "We send you a code to your Email " + Email}
+														We send you a code to your Phone Number +62 {Phone}
 													</div>
 												</div>
 												<div className="d-flex justify-content-evenly">
@@ -192,7 +192,8 @@ function Otp() {
 														<p>Didn't recieve code?</p>
 													)}
 
-													<a
+													<div
+														// href=""
 														className="fw-bold text-decoration-none"
 														disabled={seconds > 0 || minutes > 0}
 														style={{
@@ -208,7 +209,7 @@ function Otp() {
 														onClick={resendOTP}
 													>
 														Resend OTP
-													</a>
+													</div>
 												</div>
 												<div className="mt-4 small text-center">
 													<a href="#!" className="small text-muted">

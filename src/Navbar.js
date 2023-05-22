@@ -37,7 +37,7 @@ export default function Navbar() {
 				<ul className="navbar-nav ms-auto">
 					<div className="d-flex flex-column flex-lg-row flex-sm-row flex-md-row me-5">
 						<CustomLink to="/login">Login</CustomLink>
-						{/* <CustomLink to="/Register">Register</CustomLink> */}
+						<CustomLink to="/Register">Register</CustomLink>
 					</div>
 				</ul>
 			</div>
