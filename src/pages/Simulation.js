@@ -1,14 +1,35 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-
-import sm from "../assets/simulation.png";
-import { useState } from "react";
+import ojk from "../assets/logoojkblack.png";
+import lps from "../assets/logo-lps-black.png";
+import { useEffect, useRef, useState } from "react";
 
 export default function Simulation() {
-	const [Duration, setDuration] = useState();
-	const [LoanAmount, setLoanAmount] = useState();
+	// const [Duration, setDuration] = useState(3);
+	// const [LoanAmount, setLoanAmount] = useState();
+	// const [Outstanding, setOutstanding] = useState(0);
 
+	var Duration = useRef();
+	var LoanAmount = useRef();
+	const [Outstanding, setOutstanding] = useState(0);
 
+	const calculateSim = (e) => {
+		e.preventDefault();
+		console.log(Duration.current.value, LoanAmount.current.value);
+		setOutstanding(
+			LoanAmount.current.value * (1 / Duration.current.value + 1.89 / 100)
+		);
+		// Outstanding.current = LoanAmount.current.value * (1 / Duration.current.value + 1.89 / 100);
+		// console.log(Outstanding.current);
+	};
+
+	const reqLoan = (e) => {
+		e.preventDefault();
+		
+	};
+
+	// useEffect(() => {
+	// 	console.log(Outstanding);
+	// }, [Outstanding]);
 
 	return (
 		<>
@@ -25,18 +46,20 @@ export default function Simulation() {
 								<div className="card shadow" style={{ borderRadius: "1rem" }}>
 									<div className="row g-0">
 										<div className="col-md-6 col-lg-5 d-none d-md-block mt-auto mb-auto">
-											<img
-												src={sm}
-												alt="login form"
-												className="img-fluid "
-												style={{ borderRadius: "1rem 0 0 1rem" }}
-											/>
+											<div className="mt-5 ms-5">
+												<a className="fs-4 text-uppercase bg-primary m-auto text-light text-start fw-bolder p-2 text-decoration-none">
+													Simulation
+												</a>
+												<div className="font-monospace mt-1">
+													Simulate your monthly installments
+												</div>
+											</div>
 										</div>
-										<div className="col-md-6 col-lg-7 d-flex align-items-center">
+										<div className="col-md-6 col-lg-7 d-flex flex-column">
 											<div className="card-body p-4 p-lg-5 text-black">
-												<form>
+												<form onSubmit={calculateSim}>
 													<div className=" mb-3 pb-1">
-														<span className="h1">OK KTA Simulation</span>
+														<span className="h1">OK KTA</span>
 
 														<div className="fw-normal text-uppercase ">
 															<span
@@ -47,83 +70,114 @@ export default function Simulation() {
 																}}
 																className="my-auto p-1 fw-bold"
 															>
-																Count your Credit from our Simulator
+																KTA Simulation
 															</span>
 														</div>
 													</div>
-													<div className="d-flex ">
-														<div
-															className="my-auto fw-bold pt-3 pe-3 ps-3 bg-secondary rounded text-light me-1"
-															style={{
-																fontSize: "1.2rem",
-																paddingBottom: "12px",
-															}}
-														>
-															Rp
-														</div>
+													<div className="d-flex flex-column">
 														<div className="form-floating w-100">
 															<input
 																type="number"
 																className="form-control"
-																id="floatingPhoneNumber"
-																placeholder="Phone Number"
-																onChange={(e) => setLoanAmount(e.target.value)}
+																id="FloatingLoanAmount"
+																placeholder="Loan Amount"
+																ref={LoanAmount}
+																// onChange={(e) => setLoanAmount(e.target.value)}
+																// value={LoanAmount}
 																required
 															/>
-															<label htmlFor="floatingPhoneNumber">
-																Loan Amount (*in Rp.)
+															<label htmlFor="FloatingLoanAmount">
+																Loan Amount
 															</label>
-														</div>{" "}
+														</div>
+														<div className="form-floating w-100 mt-3">
+															<select
+																className="form-select"
+																id="FloatingLoanDuration"
+																ref={Duration}
+																// onChange={(e) => {
+																// 	setDuration(e.target.value);
+																// }}
+															>
+																{/* <option>.::Loan Duration::.</option> */}
+																<option value="3">3 Month</option>
+																<option value="6">6 Month</option>
+																<option value="12">12 Month</option>
+																<option value="24">24 Month</option>
+																<option value="36">36 Month</option>
+															</select>
+															<label htmlFor="FloatingLoanDuration">
+																Loan Amount
+															</label>
+														</div>
 													</div>
-													<div className="input-group mb-3 mt-3">
-														<label
-															className="input-group-text"
-															htmlFor="inputGroupSelect01"
-														>
-															Loan Duration
-														</label>
-														<select
-															className="form-select"
-															id="inputGroupSelect01"
-															onChange={(e) => {
-																setDuration(e.target.value);
-															}}
-															required
-														>
-															<option selected disabled>
-																Choose...
-															</option>
-															<option value="3">3 month</option>
-															<option value="6">6 month</option>
-															<option value="12">12 month</option>
-															<option value="24">24 month</option>
-															<option value="36">36 month</option>
-														</select>
-													</div>
+
 													<div className="pt-1 mb-4 mt-3">
-														<Link
-															to={"/otp"}
-															// state={{ phone: PhoneNumber }}
+														<button
+															type="submit"
+															// to={"/otp"}
+															// state={{ Phone: PhoneNumber }}
 															className="btn btn-primary btn-lg w-100"
 															style={{
 																// backgroundColor: "#ff7954",
 																color: "white",
 																border: "none",
 															}}
+															// onClick={calculateSim}
 														>
 															Calculate
-														</Link>
+														</button>
+													</div>
+													<div className="text-center mb-5 d-flex flex-column">
+														<h5> Cicilan Per Bulan</h5>
+														<span
+															style={{
+																letterSpacing: "1px",
+																backgroundColor: "#ff7954",
+																color: "white",
+															}}
+															className="my-auto pb-2 p-1 fw-bold fs-4 border rounded-3"
+														>
+															Rp.
+															{new Intl.NumberFormat().format(
+																Outstanding.toFixed()
+															)}
+														</span>
+														{Outstanding !== 0 ? (
+															<div className="mt-3">
+																<a
+																	className="btn btn-danger btn-md w-25 rounded-5"
+																	onClick={reqLoan}
+																>
+																	Request Loan
+																</a>
+															</div>
+														) : (
+															""
+														)}
+														<div className="d-block d-sm-block d-md-flex justify-content-start my-3">
+															<img className="my-auto" src={ojk} />
+															<img className="ms-3 my-auto" src={lps} />
+															<div
+																className="text-start my-auto ms-2 fw-bold font-monospace mt-2"
+																style={{
+																	fontSize: "9.2px",
+																	lineHeight: ".75rem",
+																}}
+															>
+																PT Bank Oke Indonesia Tbk terdaftar dan diawasi
+																oleh Otoritas Jasa Keuangan dan peserta penjamin
+																LPS.
+															</div>
+														</div>
+														<span
+															className="font-monospace text-muted me-auto"
+															style={{ fontSize: "12px" }}
+														>
+															*terms and Conditions apply
+														</span>
 													</div>
 
-													<p
-														className="mb-5 pb-lg-2"
-														style={{ color: "#393f81" }}
-													>
-														Already have an Account?{" "}
-														<Link to={"/Login"} style={{ color: "#393f81" }}>
-															Sign In here
-														</Link>
-													</p>
 													<a href="#!" className="small text-muted">
 														Terms of use.
 													</a>

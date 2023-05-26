@@ -3,6 +3,7 @@
 // change the theme
 // $theme-colors: (
   $primary: #ff7954;
+  // $info: #5a4b4d;
   // "danger": #ff4136
 // );
 
@@ -20,3 +21,8 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.bg-okbank{
+  background-color: #5a4b4d;
+}
+

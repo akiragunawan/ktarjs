@@ -12514,4 +12514,8 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
-/*# sourceMappingURL=custom.css.map */
+
+.bg-okbank {
+  background-color: #5a4b4d;
+}
+/*# sourceMappingURL=Custom.css.map */

@@ -24,49 +24,58 @@ function AdditionalData() {
 							<div className="card shadow" style={{ borderRadius: "1rem" }}>
 								<div className="mt-5 me-auto ms-5 d-flex">
 									<div className="my-auto">
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											width="16"
-											height="16"
-											fill="currentColor"
-											className="bi bi-caret-left-fill text-primary"
-											viewBox="0 0 16 16"
-										>
-											<path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
-										</svg>
+										{StepOne && !StepTwo && !StepThree ? (
+											""
+										) : StepOne && StepTwo && !StepThree ? (
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												width="16"
+												height="16"
+												fill="currentColor"
+												className="bi bi-caret-left-fill text-primary"
+												viewBox="0 0 16 16"
+											>
+												<path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
+											</svg>
+										) : (
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												width="16"
+												height="16"
+												fill="currentColor"
+												className="bi bi-caret-left-fill text-primary"
+												viewBox="0 0 16 16"
+											>
+												<path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
+											</svg>
+										)}
 									</div>
 									<div>
-										<Link
-											to="/pinfor"
-											className="text-decoration-none text-primary"
-										>
-											Back
-										</Link>
+										{StepOne && !StepTwo && !StepThree ? (
+											""
+										) : StepOne && StepTwo && !StepThree ? (
+											<a
+												className="text-decoration-none text-primary"
+												onClick={() => {
+													setStepTwo(!StepTwo);
+												}}
+											>
+												Back
+											</a>
+										) : (
+											<a
+												className="text-decoration-none text-primary"
+												onClick={() => {
+													setStepthree(!StepThree);
+												}}
+											>
+												Back
+											</a>
+										)}
 									</div>
 								</div>
 								{/* Proggress bar */}
 								<div className="mt-3 mb-3 px-5 pt-3">
-									{/* <div className="progress" style={{ height: "5px" }}>
-										<div
-											className="progress-bar"
-											role="progressbar"
-											style={{ width: "53%" }}
-											aria-valuenow="25"
-											aria-valuemin="0"
-											aria-valuemax="100"
-										></div>
-									</div>
-									<div className="progress" style={{ height: "5px" }}>
-										<div
-											className="progress-bar"
-											role="progressbar"
-											style={{ width: "2%" }}
-											aria-valuenow="25"
-											aria-valuemin="0"
-											aria-valuemax="100"
-										></div>
-									</div> */}
-
 									<div>
 										<div className="progress" style={{ height: "30px" }}>
 											<div
@@ -110,37 +119,6 @@ function AdditionalData() {
 											</div>
 										</div>
 									</div>
-
-									{/* <div className="d-flex justify-content-evenly">
-										<div className="mt-2 d-flex flex-column justify-content-center">
-											<div className="text-center">
-												<div className="text-primary">|</div>
-											</div>
-											<div>
-												<p className="fw-bold text-primary text-uppercase">
-													KTP Input
-												</p>
-											</div>
-										</div>
-										<div className="mt-2 d-flex flex-column justify-content-center">
-											<div className="text-center">
-												<div className="text-primary">|</div>
-											</div>
-											<div>
-												<p className=" text-primary text-uppercase">
-													Additional Data
-												</p>
-											</div>
-										</div>
-										<div className="mt-2 d-flex flex-column justify-content-center">
-											<div className="text-center ">
-												<div className="text-primary">|</div>
-											</div>
-											<div>
-												<p className=" text-primary text-uppercase">Done</p>
-											</div>
-										</div>
-									</div> */}
 								</div>
 								{/* Proggress bar */}
 								<div className="row g-0">
@@ -203,6 +181,7 @@ function AdditionalData() {
 																		className="form-control"
 																		id="DOBInput"
 																		placeholder="DOB"
+															
 																	/>
 																	<label htmlFor="DOBInput">
 																		Tanggal Lahir*
@@ -214,7 +193,9 @@ function AdditionalData() {
 																		id="AddressInput"
 																		placeholder="Alamat"
 																	/>
-																	<label htmlFor="AddressInput">Alamat*</label>
+																	<label htmlFor="AddressInput">
+																		Alamat (Sesuai KTP)*
+																	</label>
 																</div>
 																<div className="d-flex mt-3">
 																	<div
@@ -274,17 +255,7 @@ function AdditionalData() {
 																		Employment Status*
 																	</label>
 																</div>
-																{/* <div className="form-floating mt-3">
-															<input
-																type="date"
-																className="form-control"
-																id="DOBInput"
-																placeholder="DOB"
-															/>
-															<label htmlFor="DOBInput">
-																Tanggal Lahir*
-															</label>
-														</div> */}
+
 																<div className="form-floating mt-3">
 																	<input
 																		className="form-control"
@@ -292,34 +263,30 @@ function AdditionalData() {
 																		placeholder="Working Priod"
 																	/>
 																	<label htmlFor="WorkingPeriodInput">
-																		Working Priod*
+																		Working Period*
 																	</label>
 																</div>
-																{/* <div className="d-flex mt-3">
-															<div
-																className="my-auto fw-bold pt-3 pe-3 ps-2 bg-secondary-outline rounded border border-1 text-dark me-1"
-																style={{
-																	fontSize: "1.2rem",
-																	paddingBottom: "12px",
-																}}
-															>
-																+62
-															</div>
-															<div className="form-floating w-100">
-																<input
-																	type="number"
-																	className="form-control"
-																	id="floatingPhoneNumber"
-																	placeholder="Phone Number"
-																	value={PhoneNumber}
-																	required
-																	disabled
-																/>
-																<label htmlFor="floatingPhoneNumber">
-																	Phone Numbersdsds
-																</label>
-															</div>
-														</div> */}
+
+																<div className="card mt-3">
+																	<div className="card-body">
+																		<div className="Card-title text-muted" style={{fontSize:'0.8rem'}}>
+																			Domicile Data
+																		</div>
+																		<div className="card-text">
+																			<div className="form-floating mt-3">
+																				<input
+																					className="form-control"
+																					id="WorkingPeriodInput"
+																					placeholder="Working Priod"
+																				/>
+																				<label htmlFor="WorkingPeriodInput">
+																					Domicile Address
+																				</label>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+
 																<div>
 																	<a
 																		onClick={() => {
@@ -336,7 +303,10 @@ function AdditionalData() {
 														</div>
 													) : (
 														<div>
-															<Link to="/dashboard" className="btn btn-lg btn-danger text-white d-block mt-2">
+															<Link
+																to="/dashboard"
+																className="btn btn-lg btn-danger text-white d-block mt-2"
+															>
 																Go to Dashboard
 															</Link>
 														</div>

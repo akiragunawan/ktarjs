@@ -28,6 +28,12 @@ function Otp() {
 		useRef(null),
 	];
 
+	useEffect(() => {
+		if (!Phone) {
+			navigate("/register", { state: { Phone: Phone } });
+		}
+	}, []);
+
 	/* ****************************************** Handling Submit OTP ******************************************* */
 
 	// const submitOtp = (otpString) => {
@@ -47,7 +53,7 @@ function Otp() {
 
 			/* TODO:: HIT API FOR OTP VERIFICATION */
 
-			navigate("/additionaldata", { state: { Phone: Phone } });
+			navigate("/registerEmail", { state: { Phone: Phone } });
 		}
 	}, [digits]);
 	/* ****************************************** End Combining OTP ******************************************* */

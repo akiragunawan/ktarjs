@@ -3,10 +3,10 @@ import logokta from "./assets/ktalogo.png";
 
 export default function Navbar() {
 	return (
-		<nav className="navbar navbar-expand-sm navbar-dark bg-dark mt-2 mx-2 rounded-5 sticky-top">
+		<nav className="navbar navbar-expand-sm navbar-dark bg-okbank mt-2 mx-2 rounded-5 sticky-top">
 			<Link to="/" className="navbar-brand ms-5" href="#">
 				<img
-					src={logokta}
+					src={logokta}bank
 					width="30"
 					height="30"
 					className="d-inline-block align-top me-2"

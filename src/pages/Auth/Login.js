@@ -1,18 +1,24 @@
 // import { faCube } from "@fortawesome/react-fontawesome";
 import loginpic from "../../assets/bg22.png";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Modal} from "react-bootstrap";
+import { Modal } from "react-bootstrap";
+import { Pass } from "react-bootstrap-icons";
 // import terms from "../Auth/terms.txt";
 
 function Login() {
-	const [Email, setEmail] = useState("");
-	const [Password, setPassword] = useState("");
+	// const [Email, setEmail] = useState("");
+	// const [Password, setPassword] = useState("");
+	const Email = useRef();
+	const Password = useRef();
 	// const [Phone, setPhone] = useState("");
 	// const [IndexSignIn, setIndexSignIn] = useState(0);
 	const [Show, setShow] = useState(false);
 	const [TermsChecked, setTermsChecked] = useState(false);
+	const [EmailError, setEmailError] = useState(false);
+	const [PasswordError, setPasswordError] = useState(false);
+
 	// sessionStorage.setItem("Terms", "");
 	const navigate = useNavigate();
 	useEffect(() => {
@@ -36,27 +42,57 @@ function Login() {
 		}
 	};
 
-	const tryLogin = async () => {
-		// navigate("/otp", { state: { Phone: Phone, Email: Email } });
-		// console.log(Email, Password);
-		// const response = await fetch("http://127.0.0.1:8000/api/login", {
-		// 	method: "POST",
-		// 	mode: "cors",
-		// 	cache: "no-cache",
-		// 	credentials: "same-origin",
-		// 	headers: {
-		// 		"Content-Type": "application/x-www-form-urlencoded",
-		// 	},
-		// 	redirect: "follow",
-		// 	referrerPolicy: "no-referrer",
-		// 	body: {
-		// 		email: Email,
-		// 		Password: Password,
-		// 	},
-		// });
+	const tryLogin = async (em, pass) => {
+	 await fetch("http://127.0.0.1:8000/api/v1/auth/login", {
+			method: "POST",
+			// mode: "cors",
+			// cache: "no-cache",
+			// credentials: "same-origin",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+				"Accept": "application/json",
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Headers": "*",
+				"Access-Control-Allow-Credentials": "true",
+				// "Authorization":
+				// 	"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL3YxL2F1dGgvbG9naW4iLCJpYXQiOjE2ODUwMDgxMjMsImV4cCI6MTY4NTA5NDUyMywibmJmIjoxNjg1MDA4MTIzLCJqdGkiOiJmUncwNnJSVDA5a0hXU0VQIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.Ee_vG_iep7dwipDpQgXKCnbQ9Ok7PZHPqRfOPcWoRI4",
+				// // "Content-Type": "application/json",
+			},
+			// redirect: "follow",
+			// referrerPolicy: "no-referrer",
+			body: new URLSearchParams({
+				email: em,
+				password: pass,
+			}),
+		}).then(res => res.json());
+	
+
+		// .then((response) => response.text());
+
+		// console.log(response);
 		// if (!Email || !Password) {
 		// 	console.log(response.json());
 		// }
+	};
+
+	const FormValidation = (e) => {
+		e.preventDefault();
+		// navigate("/otp", { state: { Phone: Phone, Email: Email } });
+		console.log(Email.current.value, Password.current.value);
+		let EmailValue = Email.current.value;
+		let PasswordValue = Password.current.value;
+		if (!EmailValue.includes("@") || !EmailValue.includes(".")) {
+			setEmailError(true);
+			if (!EmailValue.includes("8")) {
+				setEmailError(true);
+			} else {
+				setEmailError(false);
+				tryLogin(EmailValue, PasswordValue);
+			}
+		} else {
+			setEmailError(false);
+			tryLogin(EmailValue, PasswordValue);
+		}
 	};
 
 	return (
@@ -82,7 +118,7 @@ function Login() {
 									</div>
 									<div className="col-md-6 col-lg-7 d-flex align-items-center">
 										<div className="card-body p-4 p-lg-5 text-black">
-											<form>
+											<form onSubmit={FormValidation}>
 												<div className=" mb-3 pb-1">
 													<span className="h1">OK KTA</span>
 
@@ -99,6 +135,7 @@ function Login() {
 														</span>
 													</div>
 												</div>
+
 												{/* <div className="d-flex my-3 justify-content-evenly">
 													<div>
 														<a
@@ -127,42 +164,51 @@ function Login() {
 												</div> */}
 
 												{/* {IndexSignIn === 0 ? ( */}
+												<div className="form-floating mb-3">
+													<input
+														type="text"
+														className="form-control"
+														id="floatingEmailInput"
+														placeholder="name@example.com"
+														ref={Email}
+														// onChange={(e) => setEmail(e.target.value)}
+														required
+													/>
+													<label htmlFor="floatingEmailInput">
+														Phone Number / Email address
+													</label>
 													<div
-														initial={{ x: "-100vw" }}
-														animate={{ x: 0 }}
-														exit={{ x: "100vw" }}
-														transition={{ duration: 0.2, origin: 1 }}
-														className="form-floating mb-3"
+														className={
+															EmailError ? "text-danger fw-bold" : "d-none"
+														}
 													>
-														<input
-															type="email"
-															className="form-control"
-															id="floatingEmailInput"
-															placeholder="name@example.com"
-															onChange={(e) => setEmail(e.target.value)}
-															required
-														/>
-														<label htmlFor="floatingEmailInput">Email address</label>
+														Wrong Email or Phone Number
 													</div>
+												</div>
+
+												<div className="form-floating mb-3">
+													<input
+														type="password"
+														className="form-control"
+														id="floatingPasswordInput"
+														placeholder="Password"
+														ref={Password}
+														// onChange={(e) => setPassword(e.target.value)}
+														required
+													/>
+													<label htmlFor="floatingPasswordInput">
+														Password
+													</label>
 													<div
-														initial={{ x: "-100vw" }}
-														animate={{ x: 0 }}
-														exit={{ x: "100vw" }}
-														transition={{ duration: 0.2, origin: 1 }}
-														className="form-floating mb-3"
+														className={
+															PasswordError ? "text-danger fw-bold" : "d-none"
+														}
 													>
-														<input
-															type="password"
-															className="form-control"
-															id="floatingPasswordInput"
-															placeholder="Password"
-															onChange={(e) => setPassword(e.target.value)}
-															required
-														/>
-														<label htmlFor="floatingPasswordInput">Password</label>
+														Wrong Password
 													</div>
+												</div>
 												{/* ) : ( */}
-													{/* <motion.div
+												{/* <motion.div
 														initial={{ x: "-100vw" }}
 														animate={{ x: 0 }}
 														exit={{ x: "100vw" }}
@@ -198,7 +244,8 @@ function Login() {
 
 												<div className="pt-1 mb-4 mt-3">
 													<button
-														onClick={tryLogin}
+														// onClick={tryLogin}
+														type="submit"
 														className="btn btn-primary btn-lg w-100"
 														style={{
 															// backgroundColor: "#ff7954",

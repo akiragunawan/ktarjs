@@ -1,11 +1,15 @@
 import { Link } from "react-router-dom";
 import registerpic from "../../assets/register.png";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Toast from "react-bootstrap/Toast";
 
 function Register() {
 	const [PhoneNumber, setPhoneNumber] = useState();
 	// console.log(phone)
+
+	useEffect(() => {}, []);
+
 	return (
 		<motion.div
 			initial={{ x: "-100vw" }}
@@ -102,6 +106,8 @@ function Register() {
 													Privacy policy
 												</a>
 											</form>
+
+											<p className="text-muted mt-3" style={{fontSize:'0.7rem'}}>*Untuk pengajuan KTA Hanya bisa di lakukan di daerah Jabodetabek</p>
 										</div>
 									</div>
 								</div>

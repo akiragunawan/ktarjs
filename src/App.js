@@ -5,7 +5,7 @@ import Submission from "./pages/Submission";
 import Login from "./pages/Auth/Login";
 import Otp from "./pages/Auth/Otp";
 import Register from "./pages/Auth/Register";
-import PersonalInformation from "./pages/Auth/PersonalInformation";
+import EmailPasswordPage from "./pages/Auth/EmailPasswordPage";
 import AdditionalData from "./pages/Auth/AdditionalData";
 import Dashboard from "./pages/Dashboard/Dashboard";
 
@@ -23,13 +23,13 @@ function App() {
 					<Routes location={location} key={location.pathname}>
 						<Route path="/" element={<Home />} />
 						<Route path="/simulation" element={<Simulation />} />
-						<Route path="/Submission" element={<Submission />} />
+						<Route path="/submission" element={<Submission />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/register" element={<Register />} />
 						<Route path="/otp" element={<Otp />} />
-						<Route path="/pinfor" element={<PersonalInformation />} />
+						<Route path="/registerEmail" element={<EmailPasswordPage />} />
 						<Route path="/additionaldata" element={<AdditionalData />} />
-						<Route path="/Dashboard" element={<Dashboard />} />
+						<Route path="/dashboard" element={<Dashboard />} />
 					</Routes>
 				</AnimatePresence>
 			</div>
