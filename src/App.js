@@ -8,6 +8,7 @@ import Register from "./pages/Auth/Register";
 import EmailPasswordPage from "./pages/Auth/EmailPasswordPage";
 import AdditionalData from "./pages/Auth/AdditionalData";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import Profile from "./pages/Profile/Profile"
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
@@ -30,6 +31,7 @@ function App() {
 						<Route path="/registerEmail" element={<EmailPasswordPage />} />
 						<Route path="/additionaldata" element={<AdditionalData />} />
 						<Route path="/dashboard" element={<Dashboard />} />
+						<Route path="/profile" element={<Profile />} />
 					</Routes>
 				</AnimatePresence>
 			</div>

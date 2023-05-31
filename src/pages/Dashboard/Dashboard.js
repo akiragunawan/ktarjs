@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
+import jwtDecode from "jwt-decode";
 
 function Dashboard() {
 	const { state } = useLocation();
-	const [Phone] = useState(state?.Phone);
-	const [Email] = useState(state?.Email);
-	console.log(Phone, Email);
+
+
+	
 
 	return (
 		<>
@@ -25,7 +26,6 @@ function Dashboard() {
 										<div className="col-md-6 col-lg-5 d-none d-md-block mt-auto mb-auto">
 											<h5>Welcome to OK KTA App</h5>
 										</div>
-										
 									</div>
 								</div>
 							</div>

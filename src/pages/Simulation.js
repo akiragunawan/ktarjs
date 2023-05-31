@@ -146,7 +146,7 @@ export default function Simulation() {
 														{Outstanding !== 0 ? (
 															<div className="mt-3">
 																<a
-																	className="btn btn-danger btn-md w-25 rounded-5"
+																	className="btn btn-danger btn-md w-50 rounded-5"
 																	onClick={reqLoan}
 																>
 																	Request Loan

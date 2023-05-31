@@ -1,23 +1,21 @@
-// import { faCube } from "@fortawesome/react-fontawesome";
 import loginpic from "../../assets/bg22.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Modal } from "react-bootstrap";
-import { Pass } from "react-bootstrap-icons";
-// import terms from "../Auth/terms.txt";
 
+import jwtDecode from "jwt-decode";
 function Login() {
-	// const [Email, setEmail] = useState("");
-	// const [Password, setPassword] = useState("");
 	const Email = useRef();
 	const Password = useRef();
-	// const [Phone, setPhone] = useState("");
-	// const [IndexSignIn, setIndexSignIn] = useState(0);
+	// const [PhoneNumber, setPhoneNumber] = useState();
 	const [Show, setShow] = useState(false);
 	const [TermsChecked, setTermsChecked] = useState(false);
 	const [EmailError, setEmailError] = useState(false);
 	const [PasswordError, setPasswordError] = useState(false);
+	const [TokenExp, setTokenExp] = useState(false);
+
+	var PhoneNumber;
 
 	// sessionStorage.setItem("Terms", "");
 	const navigate = useNavigate();
@@ -42,8 +40,24 @@ function Login() {
 		}
 	};
 
-	const tryLogin = async (em, pass) => {
-	 await fetch("http://127.0.0.1:8000/api/v1/auth/login", {
+	useEffect(() => {
+		if (sessionStorage.getItem("jwt")) {
+			console.log("ada");
+			navigate("/");
+		} else {
+		}
+	}, []);
+
+	const tryLogin = async (em, ph, pass) => {
+		setEmailError(false);
+		setPasswordError(false);
+		var data;
+		if (em) {
+			data = { email: em, password: pass };
+		} else {
+			data = { phone_num: ph, password: pass };
+		}
+		await fetch(process.env.REACT_APP_SERVER + "/api/v1/auth/login", {
 			method: "POST",
 			// mode: "cors",
 			// cache: "no-cache",
@@ -60,12 +74,31 @@ function Login() {
 			},
 			// redirect: "follow",
 			// referrerPolicy: "no-referrer",
-			body: new URLSearchParams({
-				email: em,
-				password: pass,
-			}),
-		}).then(res => res.json());
-	
+			body: new URLSearchParams(data),
+		}).then((response) => {
+			response
+				.json()
+				.then((data) => {
+					if (response.status == 200) {
+						if (data.access_token) {
+							sessionStorage.setItem("jwt", data.access_token);
+
+							navigate("/dashboard");
+							setEmailError(false);
+							setPasswordError(false);
+						}
+					} else {
+						setEmailError(true);
+						setPasswordError(true);
+					}
+
+					// var decode = jwtDecode(data.access_token);
+					// var exp_date = new Date(decode.exp *1000);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
 
 		// .then((response) => response.text());
 
@@ -78,20 +111,30 @@ function Login() {
 	const FormValidation = (e) => {
 		e.preventDefault();
 		// navigate("/otp", { state: { Phone: Phone, Email: Email } });
-		console.log(Email.current.value, Password.current.value);
+		// console.log('a')
 		let EmailValue = Email.current.value;
 		let PasswordValue = Password.current.value;
-		if (!EmailValue.includes("@") || !EmailValue.includes(".")) {
-			setEmailError(true);
-			if (!EmailValue.includes("8")) {
-				setEmailError(true);
-			} else {
+		if (
+			EmailValue.includes("@") ||
+			EmailValue.includes(".") ||
+			EmailValue.includes("08")
+		) {
+			setEmailError(false);
+			setPasswordError(false);
+			if (EmailValue.includes("@") || EmailValue.includes(".")) {
 				setEmailError(false);
-				tryLogin(EmailValue, PasswordValue);
+				setPasswordError(false);
+				PhoneNumber = null;
+				tryLogin(EmailValue, "", PasswordValue);
+			} else if (EmailValue.includes("08")) {
+				setEmailError(false);
+				PhoneNumber = EmailValue;
+				tryLogin("", PhoneNumber, PasswordValue);
+			} else {
+				setEmailError(true);
 			}
 		} else {
-			setEmailError(false);
-			tryLogin(EmailValue, PasswordValue);
+			setEmailError(true);
 		}
 	};
 
@@ -287,7 +330,7 @@ function Login() {
 				backdrop="static"
 				keyboard={false}
 			>
-				<Modal.Header closeButton>
+				<Modal.Header>
 					<Modal.Title>Terms and Agreements</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
