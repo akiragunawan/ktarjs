@@ -1,14 +1,51 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import registerpic from "../../assets/register.png";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import Toast from "react-bootstrap/Toast";
+import Swal from "sweetalert2";
 
 function Register() {
 	const [PhoneNumber, setPhoneNumber] = useState();
-	// console.log(phone)
 
-	useEffect(() => {}, []);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		// if (sessionStorage.getItem("otp") === "true") {
+		// 	navigate("/otp", { state: { Phone: PhoneNumber } });
+		// }
+
+		// if (
+		// 	sessionStorage.getItem("phone") === "null" ||
+		// 	sessionStorage.getItem("phone") === "undefined"
+		// ) {
+		// 	console.log("masuk");
+		// 	// navigate("/otp");
+		// 	sessionStorage.setItem("otp", "false");
+		// } else {
+		// 	sessionStorage.setItem("otp", "true");
+		// }
+
+		if (sessionStorage.getItem("otp") === "true") {
+			navigate("/otp");
+		}
+	}, []);
+
+	const NextOTPButton = (e) => {
+		e.preventDefault();
+		if (!PhoneNumber) {
+			Swal.fire({
+				title: "Error",
+				text: "Phone Number cant be Empty",
+				icon: "error",
+				confirmButtonText: "I Understand",
+				confirmButtonColor: '#ff7954',
+			});
+		} else {
+			sessionStorage.setItem("otp", "true");
+			sessionStorage.setItem("phone", PhoneNumber);
+			navigate("/otp", { state: { Phone: PhoneNumber } });
+		}
+	};
 
 	return (
 		<motion.div
@@ -76,7 +113,7 @@ function Register() {
 												</div>
 
 												<div className="pt-1 mb-4 mt-3">
-													<Link
+													{/* <Link
 														to={"/otp"}
 														state={{ Phone: PhoneNumber }}
 														className="btn btn-primary btn-lg w-100"
@@ -87,10 +124,23 @@ function Register() {
 														}}
 													>
 														Next
-													</Link>
+													</Link> */}
+													<a
+														className="btn btn-primary btn-lg w-100"
+														style={{
+															// backgroundColor: "#ff7954",
+															color: "white",
+															border: "none",
+														}}
+														onClick={(e) => {
+															NextOTPButton(e);
+														}}
+													>
+														Next
+													</a>
 												</div>
 
-												<p
+												{/* <p
 													className="mb-5 pb-lg-2"
 													style={{ color: "#393f81" }}
 												>
@@ -98,7 +148,7 @@ function Register() {
 													<Link to={"/Login"} style={{ color: "#393f81" }}>
 														Sign In here
 													</Link>
-												</p>
+												</p> */}
 												<a href="#!" className="small text-muted">
 													Terms of use.
 												</a>
@@ -107,7 +157,13 @@ function Register() {
 												</a>
 											</form>
 
-											<p className="text-muted mt-3" style={{fontSize:'0.7rem'}}>*Untuk pengajuan KTA Hanya bisa di lakukan di daerah Jabodetabek</p>
+											<p
+												className="text-muted mt-3"
+												style={{ fontSize: "0.7rem" }}
+											>
+												*Untuk pengajuan KTA Hanya bisa di lakukan di daerah
+												Jabodetabek
+											</p>
 										</div>
 									</div>
 								</div>

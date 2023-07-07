@@ -1,4 +1,4 @@
-import { Link, Navigate, useMatch, useNavigate, useResolvedPath } from "react-router-dom";
+import { Link, useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import logokta from "./assets/ktalogo.png";
 // import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
@@ -7,13 +7,24 @@ export default function Navbar() {
 	const [Name, setName] = useState();
 	const navigate = useNavigate();
 	var jwt = sessionStorage.getItem("jwt");
-
+	// console.log(sessionStorage.getItem("name"));
 	useEffect(() => {
 		if (jwt) {
 			getProfile();
+			console.log(Name);
 		}
-	}, [Name,jwt]);
+	}, [window.addEventListener("storage", handleStorageChange)]);
 
+	function handleStorageChange(event) {
+		if (event.key === "name") {
+			// Perform the desired action when sessionStorage value changes
+			console.log(
+				"Session storage value has changed:",
+				sessionStorage.getItem("name")
+			);
+			// Add your code here to trigger the desired effect
+		}
+	}
 	const HandleLogout = async () => {
 		await fetch(process.env.REACT_APP_SERVER + "/api/v1/auth/logout", {
 			method: "POST",
@@ -56,7 +67,7 @@ export default function Navbar() {
 				// credentials: "same-origin",
 				headers: {
 					// "Content-Type": "application/x-www-form-urlencoded",
-					"Accept": "application/json",
+					Accept: "application/json",
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Headers": "*",
 					"Access-Control-Allow-Credentials": "true",
@@ -70,8 +81,10 @@ export default function Navbar() {
 				response
 					.json()
 					.then((data) => {
-						setName(data.name);
-						console.log(Name);
+						if (data.name) {
+							console.log(data.name);
+							setName(data.name);
+						}
 					})
 					.catch((err) => {
 						console.log(err);
@@ -107,8 +120,8 @@ export default function Navbar() {
 				<ul className="navbar-nav me-auto ">
 					<div className="d-flex ">
 						<div className="d-flex flex-column flex-lg-row flex-sm-row flex-md-row">
-							<CustomLink to="/Simulation">Simulation</CustomLink>
-							<CustomLink to="/Submission">Submission</CustomLink>
+							{/* <CustomLink to="/Simulation">Simulation</CustomLink>
+							<CustomLink to="/Submission">Submission</CustomLink> */}
 						</div>
 					</div>
 				</ul>
@@ -150,8 +163,8 @@ export default function Navbar() {
 				) : (
 					<ul className="navbar-nav ms-auto">
 						<div className="d-flex flex-column flex-lg-row flex-sm-row flex-md-row me-5">
-							<CustomLink to="/login">Login</CustomLink>
-							<CustomLink to="/Register">Register</CustomLink>
+							<CustomLink to="/register">Ajukan Pinjaman</CustomLink>
+							{/* <CustomLink to="/Register">Register</CustomLink> */}
 						</div>
 					</ul>
 				)}

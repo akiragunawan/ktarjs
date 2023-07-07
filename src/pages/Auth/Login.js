@@ -125,7 +125,7 @@ function Login() {
 				setEmailError(false);
 				setPasswordError(false);
 				PhoneNumber = null;
-				tryLogin(EmailValue, "", PasswordValue);
+				tryLogin(EmailValue, "", PasswordValue);	
 			} else if (EmailValue.includes("08")) {
 				setEmailError(false);
 				PhoneNumber = EmailValue;

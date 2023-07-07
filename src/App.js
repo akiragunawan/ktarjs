@@ -8,8 +8,9 @@ import Register from "./pages/Auth/Register";
 import EmailPasswordPage from "./pages/Auth/EmailPasswordPage";
 import AdditionalData from "./pages/Auth/AdditionalData";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import Profile from "./pages/Profile/Profile"
-
+import Profile from "./pages/Profile/Profile";
+import Loan from "./pages/Loan/Loan";
+import Message from "./pages/Message/MessageLoanReqSent";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
@@ -25,13 +26,15 @@ function App() {
 						<Route path="/" element={<Home />} />
 						<Route path="/simulation" element={<Simulation />} />
 						<Route path="/submission" element={<Submission />} />
-						<Route path="/login" element={<Login />} />
+						{/* <Route path="/login" element={<Login />} /> */}
 						<Route path="/register" element={<Register />} />
 						<Route path="/otp" element={<Otp />} />
 						<Route path="/registerEmail" element={<EmailPasswordPage />} />
 						<Route path="/additionaldata" element={<AdditionalData />} />
 						<Route path="/dashboard" element={<Dashboard />} />
 						<Route path="/profile" element={<Profile />} />
+						<Route path="/loan" element={<Loan />} />
+						<Route path="/msg" element={<Message />} />
 					</Routes>
 				</AnimatePresence>
 			</div>

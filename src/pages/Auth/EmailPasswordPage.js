@@ -37,7 +37,7 @@ function EmailPasswordPage() {
 						password: Password,
 						phone_num: PhoneNumber,
 					};
-
+	
 					await fetch(process.env.REACT_APP_SERVER + "/api/v1/auth/register", {
 						method: "POST",
 						// mode: "cors",
@@ -45,7 +45,7 @@ function EmailPasswordPage() {
 						// credentials: "same-origin",
 						headers: {
 							"Content-Type": "application/x-www-form-urlencoded",
-							Accept: "application/json",
+							"Accept": "application/json",
 							"Access-Control-Allow-Origin": "*",
 							"Access-Control-Allow-Headers": "*",
 							"Access-Control-Allow-Credentials": "true",
@@ -58,11 +58,13 @@ function EmailPasswordPage() {
 							.json()
 							.then((data) => {
 								if (data.access_token) {
+									setLoadingScreen(false);
 									sessionStorage.setItem("jwt", data.access_token);
-									navigate("/additionaldata");
+									navigate("/additionaldata", { state: { Phone: PhoneNumber } });
 									setEmailExist(false);
 								} else {
 									setEmailExist(true);
+									setLoadingScreen(false);
 								}
 							})
 							.catch((err) => {
@@ -71,9 +73,11 @@ function EmailPasswordPage() {
 					});
 				} else {
 					setNotMatchPasswordError(true);
+					setLoadingScreen(false);
 				}
 			} else {
 				setPasswordCharactersError(true);
+				setLoadingScreen(false);
 			}
 		}
 	};
@@ -85,27 +89,38 @@ function EmailPasswordPage() {
 			exit={{ x: "100vw" }}
 			transition={{ duration: 0.2, origin: 1 }}
 		>
-			<div className="body-loading">
-				<div className="animation-container">
-					<div className="lightning-container">
-						<div className="lightning white"></div>
-						<div className="lightning red"></div>
+			{LoadingScreen ? (
+				<motion.div
+					initial={{ x: 0, y: 0, scale: 0 }}
+					animate={{ x: 0, y: 0, scale: 1.1 }}
+					exit={{ x: 0, y: 0, scale: 0 }}
+					transition={{ duration: 1, type: "spring", bounce: 0.6 }}
+					className="body-loading position-absolute w-100"
+					style={{ zIndex: 1000 }}
+				>
+					<div className="animation-container">
+						<div className="lightning-container">
+							<div className="lightning white"></div>
+							<div className="lightning red"></div>
+						</div>
+						<div className="boom-container">
+							<div className="shape circle big white"></div>
+							<div className="shape circle white"></div>
+							<div className="shape triangle big yellow"></div>
+							<div className="shape disc white"></div>
+							<div className="shape triangle blue"></div>
+						</div>
+						<div className="boom-container second">
+							<div className="shape circle big white"></div>
+							<div className="shape circle white"></div>
+							<div className="shape disc white"></div>
+							<div className="shape triangle blue"></div>
+						</div>
 					</div>
-					<div className="boom-container">
-						<div className="shape circle big white"></div>
-						<div className="shape circle white"></div>
-						<div className="shape triangle big yellow"></div>
-						<div className="shape disc white"></div>
-						<div className="shape triangle blue"></div>
-					</div>
-					<div className="boom-container second">
-						<div className="shape circle big white"></div>
-						<div className="shape circle white"></div>
-						<div className="shape disc white"></div>
-						<div className="shape triangle blue"></div>
-					</div>
-				</div>
-			</div>
+				</motion.div>
+			) : (
+				""
+			)}
 
 			<section className="vh-100">
 				<div className="container py-5 h-100">

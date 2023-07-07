@@ -12541,6 +12541,7 @@ input[type=number] {
       -ms-flex-align: center;
           align-items: center;
   position: relative;
+  background-color: rgba(255, 255, 255, 0.625);
   min-height: 100vh;
 }
 
@@ -12584,7 +12585,7 @@ input[type=number] {
 }
 
 .animation-container .lightning-container .lightning.white {
-  background-color: white;
+  background-color: black;
   -webkit-box-shadow: 0px 50px 50px 0px rgba(255, 255, 255, 0.3);
           box-shadow: 0px 50px 50px 0px rgba(255, 255, 255, 0.3);
 }

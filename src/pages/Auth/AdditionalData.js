@@ -1,14 +1,365 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import sucess1 from "../../assets/success1.png";
 function AdditionalData() {
 	const { state } = useLocation();
-	const [PhoneNumber] = useState(state?.Phone);
+	const [PhoneNumber, setPhoneNumber] = useState(state?.Phone);
 
-	const [StepOne, setStepOne] = useState(true);
+	const [StepOne] = useState(true);
 	const [StepTwo, setStepTwo] = useState(false);
 	const [StepThree, setStepthree] = useState(false);
+	const [ErrorMsg, setErrorMsg] = useState(false);
+	const [ErrorText, setErrorText] = useState("");
+	const [NikCheck, setNikCheck] = useState(false);
+	const [LoadingScreen, setLoadingScreen] = useState(false);
+
+	const [NIK, setNIK] = useState("");
+	const [Name, setName] = useState("");
+	const [BOD, setBOD] = useState("");
+	const [Address, setAddress] = useState("");
+	const [Salary, setSalary] = useState("");
+	const [EmploymentStatus, setEmploymentStatus] = useState("");
+	const [WorkingPeriod, setWorkingPeriod] = useState("");
+	const [Dom, setDom] = useState("");
+	// const [AvalData, setAvailData] = useState(false);
+
+	var jwt = sessionStorage.getItem("jwt");
+
+	useEffect(() => {
+		// cekStep();
+		// if (!PhoneNumber) {
+		// 	cekPhonenumber();
+		// }
+	}, []);
+
+	const cekPhonenumber = async () => {
+		await fetch(process.env.REACT_APP_SERVER + "/api/v1/auth/me", {
+			method: "GET",
+			// mode: "cors",
+			// cache: "no-cache",
+			credentials: "same-origin",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+				Accept: "application/json",
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Headers": "*",
+				"Access-Control-Allow-Credentials": "true",
+				Authorization: `Bearer ${jwt}`,
+				// // "Content-Type": "application/json",
+			},
+
+			// body: new URLSearchParams(data),
+		}).then((response) => {
+			response
+				.json()
+				.then((data) => {
+					if (response.status == 200) {
+						console.log(data);
+						setNIK(data.nik);
+						setBOD(data.dob);
+						setName(data.name);
+						setAddress(data.address);
+						setPhoneNumber(data.phone_num);
+						setSalary(data.salary);
+						setDom(data.dom);
+						setWorkingPeriod(data.work_period);
+						setEmploymentStatus(data.emp_status);
+						// console.log(data.address)
+					} else {
+						console.log(data);
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
+	};
+
+	const cekStep = async () => {
+		await fetch(process.env.REACT_APP_SERVER + "/api/v1/auth/user/step", {
+			method: "GET",
+			// mode: "cors",
+			// cache: "no-cache",
+			// credentials: "same-origin",
+			headers: {
+				// "Content-Type": "application/x-www-form-urlencoded",
+				Accept: "application/json",
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Headers": "*",
+				"Access-Control-Allow-Credentials": "true",
+				Authorization: `Bearer ${jwt}`,
+				// "Content-Type": "application/json",
+			},
+			// redirect: "follow",
+			// referrerPolicy: "no-referrer",
+			// body: new URLSearchParams(data),
+		}).then((response) => {
+			response
+				.json()
+				.then((data) => {
+					if (response.status == 200) {
+						if (data.step === 1) {
+							setStepTwo(false);
+							setStepthree(false);
+							console.log(data.step);
+						} else if (data.step === 2) {
+							setStepTwo(true);
+							setNikCheck(true);
+							setStepthree(false);
+						} else {
+							setStepTwo(true);
+							setStepthree(true);
+							setNikCheck(true);
+						}
+					} else {
+						console.log("tidak ada");
+						console.log(data);
+					}
+
+					// var decode = jwtDecode(data.access_token);
+					// var exp_date = new Date(decode.exp *1000);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
+	};
+
+	// console.log(NIK.current)
+	const firstForm = (e) => {
+		e.preventDefault();
+
+		if (!Name || !BOD || !Address) {
+			setErrorMsg(true);
+			setErrorText("Please fill all the Field");
+		} else {
+			if (!NikCheck) {
+				setErrorMsg(true);
+				setErrorText(
+					"Please Check Your NIK First Before Continue to next Step"
+				);
+			} else {
+				setErrorMsg(false);
+				setStepTwo(true);
+				// next1();
+			}
+		}
+	};
+	const secondForm = (e) => {
+		e.preventDefault();
+
+		if (!Salary || !EmploymentStatus || !WorkingPeriod || !Dom) {
+			setErrorMsg(true);
+			setErrorText("Please fill all the Field");
+		} else {
+			if (!NikCheck) {
+				setErrorMsg(true);
+				setErrorText(
+					"Please Check Your NIK First Before Continue to next Step"
+				);
+			} else {
+				setErrorMsg(false);
+				setStepthree(true);
+				// next2();
+			}
+		}
+	};
+
+	const checkNIK = async () => {
+		setLoadingScreen(true);
+
+		setNikCheck(true);
+
+		setLoadingScreen(false);
+		console.log(NikCheck);
+		// var data = { nik: NIK, num: "081282435498" };
+		// await fetch(process.env.REACT_APP_SERVER + "/api/v1/auth/user/existing", {
+		// 	method: "POST",
+		// 	// mode: "cors",
+		// 	// cache: "no-cache",
+		// 	credentials: "same-origin",
+		// 	headers: {
+		// 		"Content-Type": "application/x-www-form-urlencoded",
+		// 		Accept: "application/json",
+		// 		"Access-Control-Allow-Origin": "*",
+		// 		"Access-Control-Allow-Headers": "*",
+		// 		"Access-Control-Allow-Credentials": "true",
+		// 		Authorization: `Bearer ${jwt}`,
+		// 		// // "Content-Type": "application/json",
+		// 	},
+
+		// 	body: new URLSearchParams(data),
+		// }).then((response) => {
+		// 	response
+		// 		.json()
+		// 		.then((data) => {
+		// 			if (response.status == 200) {
+		// 				console.log(data);
+		// 				console.log("data ada");
+		// 				setLoadingScreen(false);
+		// 				navigate("/dashboard");
+		// 			} else {
+		// 				setLoadingScreen(false);
+		// 				console.log("data kosong");
+		// 				setNikCheck(true);
+		// 			}
+		// 		})
+		// 		.catch((err) => {
+		// 			console.log(err);
+		// 		});
+		// });
+	};
+
+	const next1 = async () => {
+		// if (NikCheck) {
+		// console.log("masuk");
+		var data = { nik: NIK, name: Name, dob: BOD, address: Address };
+		await fetch(process.env.REACT_APP_SERVER + "/api/v1/auth/user/complete", {
+			method: "POST",
+			// mode: "cors",
+			// cache: "no-cache",
+			credentials: "same-origin",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+				Accept: "application/json",
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Headers": "*",
+				"Access-Control-Allow-Credentials": "true",
+				Authorization: `Bearer ${jwt}`,
+				// // "Content-Type": "application/json",
+			},
+
+			body: new URLSearchParams(data),
+		}).then((response) => {
+			response
+				.json()
+				.then((data) => {
+					if (response.status == 200) {
+						console.log(data);
+						fetch(
+							process.env.REACT_APP_SERVER + "/api/v1/auth/user/step/next",
+							{
+								method: "POST",
+								// mode: "cors",
+								// cache: "no-cache",
+								credentials: "same-origin",
+								headers: {
+									"Content-Type": "application/x-www-form-urlencoded",
+									Accept: "application/json",
+									"Access-Control-Allow-Origin": "*",
+									"Access-Control-Allow-Headers": "*",
+									"Access-Control-Allow-Credentials": "true",
+									Authorization: `Bearer ${jwt}`,
+									// // "Content-Type": "application/json",
+								},
+
+								// body: new URLSearchParams(data),
+							}
+						).then((response) => {
+							response
+								.json()
+								.then((data) => {
+									if (response.status == 200) {
+										sessionStorage.setItem("name", Name);
+										window.location.reload();
+									} else {
+										console.log(data);
+									}
+								})
+								.catch((err) => {
+									console.log(err);
+								});
+						});
+					} else {
+						console.log(data);
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
+		// }else{
+		// 	console.log("tidak masuk");
+		// }
+	};
+	const next2 = async () => {
+		// if (NikCheck) {
+		// console.log("masuk");
+		var data = {
+			salary: Salary,
+			emp_status: EmploymentStatus,
+			work_period: WorkingPeriod,
+			dom: Dom,
+		};
+		await fetch(process.env.REACT_APP_SERVER + "/api/v1/auth/user/complete", {
+			method: "POST",
+			// mode: "cors",
+			// cache: "no-cache",
+			credentials: "same-origin",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+				Accept: "application/json",
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Headers": "*",
+				"Access-Control-Allow-Credentials": "true",
+				Authorization: `Bearer ${jwt}`,
+				// // "Content-Type": "application/json",
+			},
+
+			body: new URLSearchParams(data),
+		}).then((response) => {
+			response
+				.json()
+				.then((data) => {
+					if (response.status == 200) {
+						console.log(data);
+						fetch(
+							process.env.REACT_APP_SERVER + "/api/v1/auth/user/step/next",
+							{
+								method: "POST",
+								// mode: "cors",
+								// cache: "no-cache",
+								credentials: "same-origin",
+								headers: {
+									"Content-Type": "application/x-www-form-urlencoded",
+									Accept: "application/json",
+									"Access-Control-Allow-Origin": "*",
+									"Access-Control-Allow-Headers": "*",
+									"Access-Control-Allow-Credentials": "true",
+									Authorization: `Bearer ${jwt}`,
+									// // "Content-Type": "application/json",
+								},
+
+								// body: new URLSearchParams(data),
+							}
+						).then((response) => {
+							response
+								.json()
+								.then((data) => {
+									if (response.status == 200) {
+										console.log(data);
+										setStepthree(true);
+									} else {
+										console.log(data);
+									}
+								})
+								.catch((err) => {
+									console.log(err);
+								});
+						});
+					} else {
+						console.log(data);
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
+		// }else{
+		// 	console.log("tidak masuk");
+		// }
+	};
 
 	return (
 		<motion.div
@@ -17,10 +368,56 @@ function AdditionalData() {
 			exit={{ x: "100vw" }}
 			transition={{ duration: 0.2, origin: 1 }}
 		>
+			{LoadingScreen ? (
+				<motion.div
+					initial={{ x: 0, y: 0, scale: 0 }}
+					animate={{ x: 0, y: 0, scale: 1.1 }}
+					exit={{ x: 0, y: 0, scale: 0 }}
+					transition={{ duration: 1, type: "spring", bounce: 0.6 }}
+					className="body-loading position-absolute w-100"
+					style={{ zIndex: 1000 }}
+				>
+					<div className="animation-container">
+						<div className="lightning-container">
+							<div className="lightning white"></div>
+							<div className="lightning red"></div>
+						</div>
+						<div className="boom-container">
+							<div className="shape circle big white"></div>
+							<div className="shape circle white"></div>
+							<div className="shape triangle big yellow"></div>
+							<div className="shape disc white"></div>
+							<div className="shape triangle blue"></div>
+						</div>
+						<div className="boom-container second">
+							<div className="shape circle big white"></div>
+							<div className="shape circle white"></div>
+							<div className="shape disc white"></div>
+							<div className="shape triangle blue"></div>
+						</div>
+					</div>
+				</motion.div>
+			) : (
+				""
+			)}
 			<section className="vh-100">
 				<div className="container py-5 h-100">
 					<div className="row d-flex justify-content-center align-items-center h-100">
 						<div className="col col-xl-10">
+							{ErrorMsg ? (
+								<motion.div
+									initial={{ opacity: 0, y: 10 }}
+									animate={{ opacity: 100, y: 0 }}
+									exit={{ opacity: 0, y: 10 }}
+									transition={{ duration: 0.2 }}
+									className="alert alert-danger"
+									role="alert"
+								>
+									{ErrorText}
+								</motion.div>
+							) : (
+								""
+							)}
 							<div className="card shadow" style={{ borderRadius: "1rem" }}>
 								<div className="mt-5 me-auto ms-5 d-flex">
 									<div className="my-auto">
@@ -38,16 +435,7 @@ function AdditionalData() {
 												<path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
 											</svg>
 										) : (
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												width="16"
-												height="16"
-												fill="currentColor"
-												className="bi bi-caret-left-fill text-primary"
-												viewBox="0 0 16 16"
-											>
-												<path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
-											</svg>
+											<></>
 										)}
 									</div>
 									<div>
@@ -63,14 +451,7 @@ function AdditionalData() {
 												Back
 											</a>
 										) : (
-											<a
-												className="text-decoration-none text-primary"
-												onClick={() => {
-													setStepthree(!StepThree);
-												}}
-											>
-												Back
-											</a>
+											<></>
 										)}
 									</div>
 								</div>
@@ -160,80 +541,107 @@ function AdditionalData() {
 														<div>
 															<div className="form-floating mt-3">
 																<input
+																	type="number"
 																	className="form-control"
 																	id="NIKInput"
 																	placeholder="NIK"
+																	onChange={(e) => {
+																		setNIK(e.target.value);
+																	}}
+																	value={NIK}
 																/>
 																<label htmlFor="NIKInput">NIK*</label>
-																<div className="form-floating mt-3">
+															</div>
+
+															<div className="form-floating mt-3">
+																<input
+																	type="text"
+																	className="form-control"
+																	id="NameInput"
+																	placeholder="Nama"
+																	onChange={(e) => {
+																		setName(e.target.value);
+																	}}
+																	value={Name}
+																/>
+																<label htmlFor="NameInput">
+																	Nama (Sesuai KTP)
+																</label>
+															</div>
+															<div>
+																<a
+																	onClick={() => {
+																		checkNIK();
+																	}}
+																	className="btn btn-md btn-primary w-100 text-light mt-2"
+																>
+																	Check NIK
+																</a>
+															</div>
+															<div className="form-floating mt-3">
+																<input
+																	type="date"
+																	className="form-control"
+																	id="DOBInput"
+																	placeholder="DOB"
+																	onChange={(e) => {
+																		setBOD(e.target.value);
+																	}}
+																	value={BOD}
+																/>
+																<label htmlFor="DOBInput">Tanggal Lahir*</label>
+															</div>
+															<div className="form-floating mt-3">
+																<input
+																	type="text"
+																	className="form-control"
+																	id="AddressInput"
+																	placeholder="Alamat"
+																	onChange={(e) => {
+																		setAddress(e.target.value);
+																	}}
+																	value={Address}
+																/>
+																<label htmlFor="AddressInput">
+																	Alamat (Sesuai KTP)*
+																</label>
+															</div>
+															<div className="d-flex mt-3">
+																<div
+																	className="my-auto fw-bold pt-3 pe-3 ps-2 bg-secondary-outline rounded border border-1 text-dark me-1"
+																	style={{
+																		fontSize: "1.2rem",
+																		paddingBottom: "12px",
+																	}}
+																>
+																	+62
+																</div>
+																<div className="form-floating w-100">
 																	<input
+																		type="number"
 																		className="form-control"
-																		id="NameInput"
-																		placeholder="Nama"
+																		id="floatingPhoneNumber"
+																		placeholder="Phone Number"
+																		value={PhoneNumber}
+																		required
+																		disabled
 																	/>
-																	<label htmlFor="NameInput">
-																		Nama (Sesuai KTP)
+																	<label htmlFor="floatingPhoneNumber">
+																		Phone Number
 																	</label>
 																</div>
-																<div className="form-floating mt-3">
-																	<input
-																		type="date"
-																		className="form-control"
-																		id="DOBInput"
-																		placeholder="DOB"
-															
-																	/>
-																	<label htmlFor="DOBInput">
-																		Tanggal Lahir*
-																	</label>
-																</div>
-																<div className="form-floating mt-3">
-																	<input
-																		className="form-control"
-																		id="AddressInput"
-																		placeholder="Alamat"
-																	/>
-																	<label htmlFor="AddressInput">
-																		Alamat (Sesuai KTP)*
-																	</label>
-																</div>
-																<div className="d-flex mt-3">
-																	<div
-																		className="my-auto fw-bold pt-3 pe-3 ps-2 bg-secondary-outline rounded border border-1 text-dark me-1"
-																		style={{
-																			fontSize: "1.2rem",
-																			paddingBottom: "12px",
-																		}}
-																	>
-																		+62
-																	</div>
-																	<div className="form-floating w-100">
-																		<input
-																			type="number"
-																			className="form-control"
-																			id="floatingPhoneNumber"
-																			placeholder="Phone Number"
-																			value={PhoneNumber}
-																			required
-																			disabled
-																		/>
-																		<label htmlFor="floatingPhoneNumber">
-																			Phone Number
-																		</label>
-																	</div>
-																</div>
-																<div>
-																	<a
-																		onClick={() => {
-																			setStepTwo(!StepTwo);
-																			// setStepOne(!StepOne);
-																		}}
-																		// to="/additionaldata"
-																		className="btn btn-primary btn-lg text-white mt-3 w-100"
-																	>
-																		Next
-																	</a>
-																</div>
+															</div>
+															<div>
+																<a
+																	onClick={(e) => {
+																		firstForm(e);
+																		// setStepOne(!StepOne);
+																	}}
+																	// to="/additionaldata"
+																	className="btn btn-primary btn-lg text-white mt-3 w-100"
+																>
+																	Next
+																</a>
 															</div>
 														</div>
 													) : StepOne && StepTwo && !StepThree ? (
@@ -243,6 +651,10 @@ function AdditionalData() {
 																	className="form-control"
 																	id="SalaryInput"
 																	placeholder="Salary"
+																	onChange={(e) => {
+																		setSalary(e.target.value);
+																	}}
+																	value={Salary}
 																/>
 																<label htmlFor="SalaryInput">Salary*</label>
 																<div className="form-floating mt-3">
@@ -250,6 +662,9 @@ function AdditionalData() {
 																		className="form-control"
 																		id="EmploymentStatusInput"
 																		placeholder="Employment Status"
+																		onChange={(e) => {
+																			setEmploymentStatus(e.target.value);
+																		}}
 																	/>
 																	<label htmlFor="EmploymentStatusInput">
 																		Employment Status*
@@ -261,6 +676,9 @@ function AdditionalData() {
 																		className="form-control"
 																		id="WorkingPeriodInput"
 																		placeholder="Working Priod"
+																		onChange={(e) => {
+																			setWorkingPeriod(e.target.value);
+																		}}
 																	/>
 																	<label htmlFor="WorkingPeriodInput">
 																		Working Period*
@@ -269,17 +687,23 @@ function AdditionalData() {
 
 																<div className="card mt-3">
 																	<div className="card-body">
-																		<div className="Card-title text-muted" style={{fontSize:'0.8rem'}}>
+																		<div
+																			className="Card-title text-muted"
+																			style={{ fontSize: "0.8rem" }}
+																		>
 																			Domicile Data
 																		</div>
 																		<div className="card-text">
 																			<div className="form-floating mt-3">
 																				<input
 																					className="form-control"
-																					id="WorkingPeriodInput"
-																					placeholder="Working Priod"
+																					id="DomInput"
+																					placeholder="Domicile Address"
+																					onChange={(e) => {
+																						setDom(e.target.value);
+																					}}
 																				/>
-																				<label htmlFor="WorkingPeriodInput">
+																				<label htmlFor="DomInput">
 																					Domicile Address
 																				</label>
 																			</div>
@@ -289,9 +713,9 @@ function AdditionalData() {
 
 																<div>
 																	<a
-																		onClick={() => {
+																		onClick={(e) => {
 																			// setStepTwo(!StepTwo);
-																			setStepthree(!StepThree);
+																			secondForm(e);
 																		}}
 																		// to="/additionaldata"
 																		className="btn btn-primary btn-lg text-white mt-3 w-100"
@@ -304,10 +728,10 @@ function AdditionalData() {
 													) : (
 														<div>
 															<Link
-																to="/dashboard"
-																className="btn btn-lg btn-danger text-white d-block mt-2"
+																to="/loan"
+																className="btn btn-lg btn-primary text-white d-block mt-2"
 															>
-																Go to Dashboard
+																Peek My Loan Limit! 👻
 															</Link>
 														</div>
 													)}

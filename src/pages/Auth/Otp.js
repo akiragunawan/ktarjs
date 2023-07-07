@@ -7,31 +7,36 @@ import { useLocation, useNavigate } from "react-router-dom";
 function Otp() {
 	const { state } = useLocation();
 	const navigate = useNavigate();
-	const [Phone] = useState(state?.Phone);
-	// const [Email] = useState(state?.Email);
+	const [Phone, setPhone] = useState(state?.Phone);
 
-	// var phone = location.state.phone;
-	// const [otp, setOtp] = useState("");
 	const [minutes, setMinutes] = useState(2);
 	const [seconds, setSeconds] = useState(0);
 
-	// console.log(Phone, Email);
+	const [digits, setDigits] = useState(["", "", "", ""]);
 
-	const [digits, setDigits] = useState(["", "", "", "", "", ""]);
-
-	const inputRefs = [
-		useRef(null),
-		useRef(null),
-		useRef(null),
-		useRef(null),
-		useRef(null),
-		useRef(null),
-	];
+	const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
 	useEffect(() => {
 		if (!Phone) {
-			navigate("/register", { state: { Phone: Phone } });
+			if (
+				sessionStorage.getItem("phone") !== "null" ||
+				sessionStorage.getItem("Phone") !== "undefined"
+			) {
+				setPhone(sessionStorage.getItem("phone"));
+			} else {
+				navigate("/register");
+				sessionStorage.setItem("otp", "false");
+			}
+		} else {
+			sessionStorage.setItem("phone", Phone);
 		}
+
+		// if (!Phone) {
+		// 	navigate("/register", { state: { Phone: Phone } });
+		// }
+		// if (sessionStorage.getItem("otp") === "false") {
+		// 	navigate("/register");
+		// }
 	}, []);
 
 	/* ****************************************** Handling Submit OTP ******************************************* */
@@ -48,12 +53,12 @@ function Otp() {
 	useEffect(() => {
 		const otpString = digits.join(""); // Concatenate digits into a single string
 
-		if (otpString.length === 6) {
+		if (otpString.length === 4) {
 			// submitOtp(otpString);
 
 			/* TODO:: HIT API FOR OTP VERIFICATION */
-
-			navigate("/registerEmail", { state: { Phone: Phone } });
+			sessionStorage.setItem("otp", "false");
+			navigate("/additionaldata", { state: { Phone: Phone } });
 		}
 	}, [digits]);
 	/* ****************************************** End Combining OTP ******************************************* */
@@ -123,6 +128,16 @@ function Otp() {
 		setSeconds(0);
 	};
 	/* **************************************************** End Timer Counter ***************************************************** */
+	/****************************************************** Cancel OTP ************************************************************ */
+	const CancelOTP = (e) => {
+		e.preventDefault();
+		sessionStorage.setItem("otp", "false");
+		sessionStorage.setItem("phone", null);
+		navigate("/register");
+	};
+
+	/****************************************************** End Cancel OTP ************************************************************ */
+
 	return (
 		<motion.div
 			initial={{ x: "-100vw" }}
@@ -216,6 +231,16 @@ function Otp() {
 													>
 														Resend OTP
 													</div>
+												</div>
+												<div className="my-3">
+													<a
+														className="btn btn-danger d-block"
+														onClick={(e) => {
+															CancelOTP(e);
+														}}
+													>
+														Cancel
+													</a>
 												</div>
 												<div className="mt-4 small text-center">
 													<a href="#!" className="small text-muted">
